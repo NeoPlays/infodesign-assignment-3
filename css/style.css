@@ -1,0 +1,170 @@
+
+:root{
+  --bg:       #ffffff;   /* page background            */
+  --ink:      #1d1d1f;   /* main text (Apple near-black)*/
+  --muted:    #6e6e73;   /* secondary text             */
+  --hairline: #d2d2d7;   /* thin separators / axes     */
+  --accent:   #d62728;   /* one warm red = "emissions" */
+  --panel:    #f5f5f7;   /* light grey control panels  */
+
+  --maxw: 1400px;
+
+  /* San Francisco on Apple devices, graceful fallback elsewhere */
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+sub{ font-size: .7em; }
+
+a{ color: var(--accent); text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+/* ============================ INTRO ============================ */
+.intro{
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+}
+.intro-inner{ max-width: 760px; }
+
+.kicker{
+  text-transform: uppercase; letter-spacing: .18em;
+  font-size: .8rem; color: var(--muted); margin: 0 0 1.5rem;
+}
+.intro h1{
+  font-family: var(--display);
+  font-weight: 600;                       /* Apple uses semibold, not black */
+  letter-spacing: -0.02em;
+  font-size: clamp(2.6rem, 8vw, 5.5rem);
+  line-height: 1.05; margin: 0;
+}
+.intro h1 .accent{ color: var(--accent); }
+
+.lede{
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  color: var(--muted); margin: 1.8rem auto 0; max-width: 600px;
+}
+/* the small course/group credit line above the title - keep it on one line */
+.lede.credit{
+  font-size: 1rem; max-width: none; white-space: nowrap; margin-top: .5rem;
+}
+.scroll-hint{
+  margin-top: 3rem; color: var(--muted); font-size: .9rem; letter-spacing: .08em;
+  animation: bob 2s ease-in-out infinite;
+}
+@keyframes bob{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(7px);} }
+
+/* ====================== SCROLLYTELLING LAYOUT ======================
+   ".view" = two columns: sticky ".graphic" + scrolling ".steps". */
+.view{
+  position: relative; max-width: var(--maxw); margin: 0 auto; padding: 0 0.5rem;
+  display: grid; grid-template-columns: 1.35fr 1fr; gap: 2rem;
+}
+.graphic{
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.chart{ width: 100%; height: 80vh; }
+#v2 { grid-template-columns: 2.5fr 1fr; }
+#v2-chart { height: auto; }
+#v2-chart svg { height: auto; }
+.chart svg{ width: 100%; height: 100%; overflow: visible; }
+
+.steps{ padding: 16vh 0; }
+.step{
+  min-height: 60vh;
+  display: flex; flex-direction: column; justify-content: center;
+  opacity: .35;                              /* inactive steps fade back */
+  transition: opacity .35s ease;
+}
+.step.is-active{ opacity: 1; }
+.step h2{
+  font-family: var(--display); font-weight: 600; letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 3vw, 2.2rem); line-height: 1.12; margin: 0 0 1rem;
+}
+.step p{ font-size: 1.1rem; color: var(--muted); margin: .2rem 0; }
+.step.is-active p{ color: var(--ink); }
+.step strong{ color: var(--ink); font-weight: 600; }
+.hl-coal{ color: var(--accent); font-weight: 600; }
+
+/* small control panels (slider / dropdown) under a chart */
+.controls{
+  margin-top: 1.1rem; display: flex; align-items: center; gap: .7rem;
+  background: var(--panel); border-radius: 12px; padding: .55rem 1rem;
+  font-size: .9rem; color: var(--muted);
+}
+.controls label{ white-space: nowrap; }
+.controls #v2-year-label{ color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.controls input[type=range]{ width: 220px; accent-color: var(--accent); }
+.controls select{
+  background: #fff; color: var(--ink); border: 1px solid var(--hairline);
+  border-radius: 8px; padding: .35rem .6rem; font-family: var(--sans); font-size: .95rem;
+}
+
+/* ============================ OUTRO ============================ */
+.outro{ max-width: 720px; margin: 0 auto; padding: 20vh 1.5rem 24vh; text-align: center; }
+.outro h2{ font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem,5vw,2.8rem); margin: 0 0 1.4rem; }
+.outro p{ font-size: 1.15rem; color: var(--muted); }
+.outro .source{ font-size: .9rem; margin-top: 2.5rem; }
+
+/* ======================= SCROLL PROGRESS RAIL =======================
+   Fixed on the right edge: a fill that grows with scroll + one dot per view. */
+#progress{
+  position: fixed; top: 50%; right: 1.6rem; transform: translateY(-50%);
+  z-index: 40; display: flex; flex-direction: column; align-items: center;
+  gap: 1.4rem; padding: .4rem 0;
+}
+.progress-track{
+  position: absolute; top: 0; bottom: 0; width: 2px;
+  background: var(--hairline); border-radius: 2px; overflow: hidden;
+}
+.progress-fill{
+  position: absolute; top: 0; left: 0; width: 100%; height: 0;
+  background: var(--accent); transition: height .15s linear;
+}
+.progress-dot{
+  position: relative; width: 11px; height: 11px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--hairline);
+  box-sizing: border-box; cursor: pointer;
+  transition: transform .2s, border-color .2s, background .2s;
+}
+.progress-dot:hover{ border-color: var(--muted); }
+/* every checkpoint reached so far is filled red */
+.progress-dot.is-passed{ background: var(--accent); border-color: var(--accent); }
+/* the current checkpoint is also enlarged */
+.progress-dot.is-active{
+  background: var(--accent); border-color: var(--accent); transform: scale(1.35);
+}
+/* the label sits to the left of its dot and only shows on hover/active */
+.progress-label{
+  position: absolute; right: 1.6rem; top: 50%; transform: translateY(-50%);
+  white-space: nowrap; font-size: .8rem; color: var(--ink);
+  background: var(--bg); padding: .15rem .5rem; border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.10);
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.progress-dot:hover .progress-label,
+.progress-dot.is-active .progress-label{ opacity: 1; }
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width: 880px){
+  .view{ grid-template-columns: 1fr; }
+  .graphic{ height: 60vh; }
+  .chart{ height: 50vh; }
+  .steps{ padding: 4vh 0; }
+  .step{ min-height: auto; padding: 30vh 0; opacity: 1; }
+  #progress{ display: none; }   /* hide the rail on narrow screens */
+  .lede.credit{ white-space: normal; }  /* let the credit wrap on phones */
+}
