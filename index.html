@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Who Owes the Atmosphere? Carbon Inequality</title>
+<meta name="description" content="An interactive visual story about who is responsible for CO2 emissions across countries, wealth and time." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ===================== SCROLL PROGRESS RAIL =====================
+     Fixed rail on the right: one clickable checkpoint per view (V1-V6). -->
+<nav id="progress" aria-label="Story progress">
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <a class="progress-dot" href="#v1" data-view="v1"><span class="progress-label">The scale of the crisis</span></a>
+  <a class="progress-dot" href="#v2" data-view="v2"><span class="progress-label">Who emits per person?</span></a>
+  <a class="progress-dot" href="#v3" data-view="v3"><span class="progress-label">The historical debt</span></a>
+  <a class="progress-dot" href="#v4" data-view="v4"><span class="progress-label">What drives a country?</span></a>
+  <a class="progress-dot" href="#v5" data-view="v5"><span class="progress-label">Wealth vs emissions</span></a>
+  <a class="progress-dot" href="#v6" data-view="v6"><span class="progress-label">The 500-fold gap</span></a>
+</nav>
+
+<!-- ============================ INTRO ============================ -->
+<header class="intro">
+  <div class="intro-inner">
+    <p class="lede credit">Fundamentals of Visualization - Design Assignment 3 - Group 15</p>
+    <h1>Who Owes the<br><span class="accent">Atmosphere?</span></h1>
+    <p class="lede">Global CO<sub>2</sub> is at an all-time high, but responsibility is radically unequal.
+       Scroll to explore who emitted what, across countries, wealth and 270 years of history.</p>
+    <p class="scroll-hint">Scroll to begin ↓</p>
+  </div>
+</header>
+
+<main id="story">
+
+  <!-- ===================== OUTRO ===================== -->
+  <section class="outro">
+    <h2>So, who owes the atmosphere?</h2>
+    <p>Responsibility for CO<sub>2</sub> is not a single number. It depends on whether you count <strong>totals, per-capita, history, or wealth</strong>. Whichever lens you choose, the burden is profoundly unequal.</p>
+    <p class="source">Data: <a href="https://github.com/owid/co2-data">Our World in Data: CO<sub>2</sub> &amp; GHG Emissions</a> Built with D3.js &amp; Scrollama</p>
+  </section>
+
+</main>
+
+<div id="tooltip" class="tooltip" aria-hidden="true"></div>
+
+<!-- libraries (loaded in the browser; no build step) -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/scrollama@3"></script>
+
+<!-- app -->
+<script src="js/util.js"></script>
+<script src="js/v1_trend.js"></script>
+<script src="js/v2_choropleth.js"></script>
+<script src="js/v3_treemap.js"></script>
+<script src="js/v4_profile.js"></script>
+<script src="js/v5_scatter.js"></script>
+<script src="js/v6_inequality.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
