@@ -4,9 +4,6 @@ An interactive **visual storytelling** web app about who is responsible for COâ‚
 emissions across countries, wealth and 270 years of history.
 Final project for *VU 193.020 Fundamentals of Visualization*, TU Wien - Group 15.
 
-**Live demo:** _add the GitHub Pages URL here_
-**Repository:** _add the repo URL here_
-
 ## The story (6 narrative views)
 
 1. **The scale of the crisis** - animated line chart of global COâ‚‚ (1750-2023).
@@ -62,6 +59,23 @@ HTML, CSS and JavaScript, and the data is already pre-processed in `data/`.
    ```
 
 4. **Stop the server** when you are done with `Ctrl+C` in the terminal.
+
+## Regenerate the data (optional)
+
+The repository already ships the pre-processed JSON in `data/`, so this step is
+**not** required to run the app. To rebuild it from the raw dataset:
+
+1. Download the OWID dataset (`owid-co2-data.csv`) from
+   https://github.com/owid/co2-data.
+2. Run the preprocessing script (standard-library Python only, no extra
+   dependencies), pointing it at the CSV:
+
+   ```bash
+   cd scripts
+   CO2_CSV=/path/to/owid-co2-data.csv python3 preprocess.py
+   ```
+
+   The regenerated JSON files are written to `data/`.
 
 ## Data source
 
