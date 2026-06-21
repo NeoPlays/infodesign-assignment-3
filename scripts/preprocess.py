@@ -116,3 +116,28 @@ json.dump({"years": YEARS_MAP, "data": choro},
           open(os.path.join(OUT, "choropleth.json"), "w"))
 print(f"choropleth.json: {len(choro)} countries x {len(YEARS_MAP)} yrs")
 
+# === 3. Treemap: cumulative CO2 (historical debt, View 3) ==================
+latest = {}
+for row in rows:
+    if not is_country(row):
+        continue
+    y = int(float(row["year"]))
+    cum = num(row["cumulative_co2"])
+    if cum is None:
+        continue
+    iso = row["iso_code"]
+    if iso not in latest or y > latest[iso]["year"]:
+        latest[iso] = {"year": y, "name": row["country"], "iso3": iso,
+                       "cumulative": cum,
+                       "share": num(row["share_global_cumulative_co2"])}
+items = sorted(latest.values(), key=lambda d: d["cumulative"], reverse=True)
+top = items[:40]
+rest = sum(d["cumulative"] for d in items[40:])
+tree = [{"name": d["name"], "iso3": d["iso3"],
+         "cumulative": r(d["cumulative"], 1),
+         "share": r(d["share"], 2) if d["share"] is not None else None} for d in top]
+tree.append({"name": "Rest of World", "iso3": "ROW",
+             "cumulative": r(rest, 1), "share": None})
+json.dump(tree, open(os.path.join(OUT, "treemap.json"), "w"))
+print(f"treemap.json: {len(tree)} blocks")
+
