@@ -141,3 +141,32 @@ tree.append({"name": "Rest of World", "iso3": "ROW",
 json.dump(tree, open(os.path.join(OUT, "treemap.json"), "w"))
 print(f"treemap.json: {len(tree)} blocks")
 
+# === 4. Country driver profiles (View 4) ===================================
+# For each country: fuel breakdown over time + carbon intensity (co2/gdp).
+# Restrict to a meaningful set (top emitters + notable cases) to bound size.
+NOTABLE = {"NOR","QAT","ISL","ARE","KWT","CHE","SWE","FRA","NGA","ETH","COD"}
+top_iso = {d["iso3"] for d in top} | NOTABLE
+YEARS_PROFILE = list(range(1950, 2024))
+profiles = {}
+for row in rows:
+    iso = row["iso_code"]
+    if iso not in ISO or iso not in top_iso:
+        continue
+    y = int(float(row["year"]))
+    if y not in YEARS_PROFILE:
+        continue
+    p = profiles.setdefault(iso, {"name": row["country"], "iso3": iso, "series": []})
+    p["series"].append({
+        "year": y,
+        "coal": r(num(row["coal_co2"]), 1),
+        "oil":  r(num(row["oil_co2"]), 1),
+        "gas":  r(num(row["gas_co2"]), 1),
+        "cement": r(num(row["cement_co2"]), 1),
+        "flaring": r(num(row["flaring_co2"]), 1),
+        "intensity": r(num(row["co2_per_gdp"]), 3),   # kg CO2 per $ GDP
+    })
+for p in profiles.values():
+    p["series"].sort(key=lambda d: d["year"])
+json.dump(profiles, open(os.path.join(OUT, "country_profiles.json"), "w"))
+print(f"country_profiles.json: {len(profiles)} countries")
+
