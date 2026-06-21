@@ -2,6 +2,7 @@
    Scrolling highlights the extremes, then recolours bars by share of warming. */
 
 let ineqBars, ineqX, ineqY, ineqPlot, ineqData, ineqInnerW, ineqInnerH, warmColor;
+let ineqCurrentStep = 0;   // active step, restored on deselect
 
 function drawInequality(){
   // keep countries with a value, sort highest to lowest
@@ -19,8 +20,9 @@ function drawInequality(){
   ineqX = d3.scaleBand().domain(ineqData.map((_, i) => i)).range([0, ineqInnerW]).padding(0.1);
   ineqY = d3.scaleLinear().domain([0, d3.max(ineqData, d => d.co2_pc)]).nice().range([ineqInnerH, 0]);
 
-  // colour scale used in the final step (share of observed warming)
-  warmColor = d3.scaleQuantize().domain([0, d3.max(ineqData, d => d.temp_share || 0)]).range(REDS);
+  // colour by share of warming; domain capped at 1% (the data is very skewed) so
+  // the few big emitters clamp to the darkest shade instead of all looking pale
+  warmColor = d3.scaleQuantize().domain([0, 1]).range(REDS);
 
   ineqPlot.append("g").attr("class", "axis").call(d3.axisLeft(ineqY).ticks(6));
   ineqPlot.append("text").attr("class", "annotation").attr("x", 0).attr("y", -12)
@@ -56,13 +58,15 @@ function drawInequality(){
 function highlightInequalityCountry(iso){
   ineqPlot.selectAll(".sel-label").remove();
   const hit = iso ? ineqData.find(d => d.iso3 === iso) : null;
-  if (!hit){   // nothing selected, or country not on this chart -> reset
-    ineqBars.attr("opacity", 0.9).attr("fill", "#fb6a4a");
+  if (!hit){   // deselected -> restore the current step
+    inequalityStep(ineqCurrentStep);
     return;
   }
+  // keep colours, fade the rest, and outline the selected so it pops even when pale
   ineqBars
-    .attr("opacity", d => d.iso3 === iso ? 1 : 0.15)
-    .attr("fill", d => d.iso3 === iso ? "#a50f15" : "#fb6a4a");
+    .attr("opacity", d => d.iso3 === iso ? 1 : 0.25)
+    .attr("stroke", d => d.iso3 === iso ? "#1d1d1f" : "none")
+    .attr("stroke-width", d => d.iso3 === iso ? 1 : 0);
   {
     const i = ineqData.indexOf(hit);
     ineqPlot.append("text").attr("class", "annotation lead sel-label")
@@ -83,7 +87,9 @@ function ineqLabel(text, iso){
 }
 
 function inequalityStep(i){
+  ineqCurrentStep = i;
   ineqPlot.selectAll(".step-label").remove();
+  ineqBars.attr("stroke", "none");   // clear any selection outline
 
   if (i === 0){
     ineqBars.attr("opacity", 0.9).attr("fill", "#fb6a4a");
