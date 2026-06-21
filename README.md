@@ -4,6 +4,8 @@ An interactive **visual storytelling** web app about who is responsible for COâ‚
 emissions across countries, wealth and 270 years of history.
 Final project for *VU 193.020 Fundamentals of Visualization*, TU Wien - Group 15.
 
+**Live Demo:** https://neoplays.github.io/infodesign-assignment-3/
+
 ## The story (6 narrative views)
 
 1. **The scale of the crisis** - animated line chart of global COâ‚‚ (1750-2023).
