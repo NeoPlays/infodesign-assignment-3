@@ -119,6 +119,30 @@ a:hover{ text-decoration: underline; }
 .outro p{ font-size: 1.15rem; color: var(--muted); }
 .outro .source{ font-size: .9rem; margin-top: 2.5rem; }
 
+/* ============================ CHART BITS ============================
+   Axes and labels styled via classes, so the JS stays clean. */
+.axis text{ fill: var(--muted); font-size: 11px; }
+.axis line, .axis path{ stroke: var(--hairline); }
+.grid line{ stroke: var(--hairline); stroke-opacity: .6; }
+.grid path{ stroke: none; }
+.chart-title{ fill: var(--ink); font-size: 13px; font-weight: 600; }
+.annotation{ fill: var(--muted); font-size: 12px; }
+.annotation.lead{ fill: var(--accent); font-weight: 600; }
+.legend text{ fill: var(--muted); font-size: 11px; }
+
+/* faded vs. highlighted shapes (used by treemap / bar steps) */
+.faded{ opacity: .2; transition: opacity .4s; }
+
+/* ============================ TOOLTIP ============================ */
+.tooltip{
+  position: fixed; pointer-events: none; z-index: 50; opacity: 0;
+  background: #fff; border: 1px solid var(--hairline); border-radius: 10px;
+  padding: .5rem .7rem; font-size: .85rem; color: var(--ink);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12); transition: opacity .12s; max-width: 240px;
+}
+.tooltip .tt-title{ font-weight: 600; margin-bottom: .15rem; }
+.tooltip .tt-val{ color: var(--accent); font-variant-numeric: tabular-nums; }
+
 /* ======================= SCROLL PROGRESS RAIL =======================
    Fixed on the right edge: a fill that grows with scroll + one dot per view. */
 #progress{
