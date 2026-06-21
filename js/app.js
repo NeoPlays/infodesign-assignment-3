@@ -49,12 +49,20 @@ const STEP_FUNCTIONS = {
 
 // Scrollama watches the ".step" blocks and reports which view + step is in view.
 function setupScrolly(){
-  const fill = document.getElementById("progress-fill");
+  const fill  = document.getElementById("progress-fill");
+  const track = document.querySelector("#progress .progress-track");
+  let activeView = null;
 
-  // grow the rail fill with overall page scroll progress
-  function updateFill(){
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    fill.style.height = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+  // grow the rail fill so it ends exactly at the active checkpoint
+  function fillToActiveDot(){
+    if (!activeView) { fill.style.height = "0%"; return; }
+    const dot = document.querySelector('#progress .progress-dot[data-view="' + activeView + '"]');
+    if (!dot) return;
+    const trackBox = track.getBoundingClientRect();
+    const dotBox   = dot.getBoundingClientRect();
+    const offset   = (dotBox.top + dotBox.height / 2) - trackBox.top;
+    const pct      = (offset / trackBox.height) * 100;
+    fill.style.height = Math.max(0, Math.min(100, pct)) + "%";
   }
 
   const scroller = scrollama();
@@ -68,16 +76,17 @@ function setupScrolly(){
     });
 
     // light up the rail: active checkpoint + everything up to it is "passed"
+    activeView = view;
     const dots = [...document.querySelectorAll("#progress .progress-dot")];
     const activeIndex = dots.findIndex(d => d.dataset.view === view);
     dots.forEach(function(dot, i){
       dot.classList.toggle("is-active", i === activeIndex);
       dot.classList.toggle("is-passed", i <= activeIndex);
     });
+    fillToActiveDot();
 
     STEP_FUNCTIONS[view](step);
   });
 
-  window.addEventListener("scroll", updateFill);
-  window.addEventListener("resize", function(){ scroller.resize(); });
+  window.addEventListener("resize", function(){ scroller.resize(); fillToActiveDot(); });
 }
