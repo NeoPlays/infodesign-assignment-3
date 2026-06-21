@@ -75,8 +75,10 @@ a:hover{ text-decoration: underline; }
 .graphic{
   position: sticky; top: 0; height: 100vh;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--bg); z-index: 1;
 }
 .chart{ width: 100%; height: 80vh; }
+.graphic:has(.controls) .chart{ height: 66vh; }
 #v2 { grid-template-columns: 2.5fr 1fr; }
 #v2-chart { height: auto; }
 #v2-chart svg { height: auto; }
@@ -184,9 +186,13 @@ a:hover{ text-decoration: underline; }
 .progress-dot.is-active .progress-label{ opacity: 1; }
 
 /* ============================ RESPONSIVE ============================ */
-@media (max-width: 880px){
+@media (min-width: 1101px) and (max-width: 1480px){
+  #story{ padding-right: 3rem; }
+}
+@media (max-width: 1100px){
   .view{ grid-template-columns: 1fr; }
-  .graphic{ height: 60vh; }
+  #v2{ grid-template-columns: 1fr; }
+  .graphic{ height: 60vh; top: 8vh; }
   .chart{ height: 50vh; }
   .steps{ padding: 4vh 0; }
   .step{ min-height: auto; padding: 30vh 0; opacity: 1; }
