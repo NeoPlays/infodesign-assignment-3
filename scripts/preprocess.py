@@ -80,3 +80,15 @@ with open(CSV, newline="") as f:
     for row in csv.DictReader(f):
         rows.append(row)
 print(f"loaded {len(rows)} rows")
+
+# === 1. Global trend (View 1) =========================================
+trend = []
+for row in rows:
+    if row["country"] == "World" and row["co2"]:
+        y = int(float(row["year"]))
+        if 1750 <= y <= 2023:
+            trend.append({"year": y, "co2": r(num(row["co2"]), 1)})
+trend.sort(key=lambda d: d["year"])
+json.dump(trend, open(os.path.join(OUT, "global_trend.json"), "w"))
+print(f"global_trend.json: {len(trend)} years")
+
