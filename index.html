@@ -47,6 +47,26 @@
     </div>
   </section>
 
+  <!-- ===================== V2 - CHOROPLETH ===================== -->
+  <section class="view" id="v2">
+    <div class="graphic">
+      <div class="chart" id="v2-chart"></div>
+      <div class="controls">
+        <label>Year <span id="v2-year-label">2022</span></label>
+        <input type="range" id="v2-slider" min="1900" max="2022" value="2022" step="1" />
+        <select id="v2-country-select">
+          <option value="">All countries</option>
+        </select>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step" data-view="v2" data-step="0"><h2>Who emits per person?</h2><p>This map shows CO<sub>2</sub> <strong>per capita</strong>. A century ago, only the early industrialisers stood out.</p></div>
+      <div class="step" data-view="v2" data-step="1"><p>By <strong>1950</strong>, North America and Europe burned far more per person than anyone else.</p></div>
+      <div class="step" data-view="v2" data-step="2"><p>By <strong>1990</strong>, oil-rich Gulf states join the top of the scale.</p></div>
+      <div class="step" data-view="v2" data-step="3"><p><strong>Today</strong> the gap is staggering. Drag the slider or hover any country to explore.</p></div>
+    </div>
+  </section>
+
   <!-- ===================== OUTRO ===================== -->
   <section class="outro">
     <h2>So, who owes the atmosphere?</h2>

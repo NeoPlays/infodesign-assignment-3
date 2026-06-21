@@ -92,3 +92,27 @@ trend.sort(key=lambda d: d["year"])
 json.dump(trend, open(os.path.join(OUT, "global_trend.json"), "w"))
 print(f"global_trend.json: {len(trend)} years")
 
+# === Helper: only real countries (have iso in our map) =====================
+def is_country(row):
+    return row["iso_code"] in ISO
+
+# === 2. Choropleth: co2_per_capita per country per year (View 2) ===========
+YEARS_MAP = list(range(1900, 2024))
+choro = {}
+for row in rows:
+    if not is_country(row):
+        continue
+    y = int(float(row["year"]))
+    if y not in YEARS_MAP:
+        continue
+    pc = num(row["co2_per_capita"])
+    if pc is None:
+        continue
+    iso = row["iso_code"]
+    nid, cont = ISO[iso]
+    rec = choro.setdefault(str(nid), {"name": row["country"], "iso3": iso, "vals": {}})
+    rec["vals"][str(y)] = r(pc, 2)
+json.dump({"years": YEARS_MAP, "data": choro},
+          open(os.path.join(OUT, "choropleth.json"), "w"))
+print(f"choropleth.json: {len(choro)} countries x {len(YEARS_MAP)} yrs")
+
