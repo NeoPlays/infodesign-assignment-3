@@ -41,9 +41,13 @@ function showTooltip(html, event){
 }
 function moveTooltip(event){
   const tip = document.getElementById("tooltip");
-  // place next to the cursor
-  tip.style.left = (event.clientX + 14) + "px";
-  tip.style.top  = (event.clientY + 14) + "px";
+  // place next to the cursor, but flip if it would leave the window
+  let x = event.clientX + 14;
+  let y = event.clientY + 14;
+  if (x + tip.offsetWidth  > window.innerWidth)  x = event.clientX - tip.offsetWidth  - 14;
+  if (y + tip.offsetHeight > window.innerHeight) y = event.clientY - tip.offsetHeight - 14;
+  tip.style.left = x + "px";
+  tip.style.top  = y + "px";
 }
 function hideTooltip(){
   document.getElementById("tooltip").style.opacity = 0;
