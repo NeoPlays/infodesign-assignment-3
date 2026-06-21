@@ -170,3 +170,27 @@ for p in profiles.values():
 json.dump(profiles, open(os.path.join(OUT, "country_profiles.json"), "w"))
 print(f"country_profiles.json: {len(profiles)} countries")
 
+# === 5. Scatter: wealth vs emissions (View 5) ==============================
+# Latest year with good GDP coverage = 2022.
+SCAT_YEAR = 2022
+scatter = []
+for row in rows:
+    if not is_country(row):
+        continue
+    if int(float(row["year"])) != SCAT_YEAR:
+        continue
+    gdp = num(row["gdp"]); pop = num(row["population"])
+    pc = num(row["co2_per_capita"])
+    if not gdp or not pop or pc is None:
+        continue
+    iso = row["iso_code"]
+    scatter.append({
+        "name": row["country"], "iso3": iso, "continent": ISO[iso][1],
+        "gdp_pc": r(gdp / pop, 0),
+        "co2_pc": r(pc, 2),
+        "pop": int(pop),
+    })
+json.dump({"year": SCAT_YEAR, "data": scatter},
+          open(os.path.join(OUT, "scatter.json"), "w"))
+print(f"scatter.json: {len(scatter)} countries ({SCAT_YEAR})")
+
