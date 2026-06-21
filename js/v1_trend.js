@@ -68,8 +68,8 @@ function trendStep(i){
         .attr("cx", trendX(last.year)).attr("cy", trendY(last.co2)).attr("r", 4)
         .attr("fill", "var(--accent)");
     trendNotes.append("text").attr("class", "annotation lead")
-        .attr("x", trendX(last.year))
-        .attr("y", trendY(last.co2) - 12)
+        .attr("x", Math.min(trendX(last.year), trendW - 200))
+        .attr("y", Math.max(trendY(last.co2) - 12, 12))
         .text(`${last.year} · ${TREND_LABELS[cutoff]}`);
   }
 }
