@@ -194,3 +194,35 @@ json.dump({"year": SCAT_YEAR, "data": scatter},
           open(os.path.join(OUT, "scatter.json"), "w"))
 print(f"scatter.json: {len(scatter)} countries ({SCAT_YEAR})")
 
+# === 6. Inequality / small-country impact (View 6) =========================
+# Per-capita 2022 for every country + population + temperature-change share,
+# so we can show the ~500-fold gap and contrast responsibility vs. exposure.
+ineq = []
+tshare = {}
+for row in rows:
+    if not is_country(row):
+        continue
+    y = int(float(row["year"]))
+    ts = num(row["share_of_temperature_change_from_ghg"])
+    if ts is not None:
+        if row["iso_code"] not in tshare or y > tshare[row["iso_code"]][0]:
+            tshare[row["iso_code"]] = (y, ts)
+for row in rows:
+    if not is_country(row):
+        continue
+    if int(float(row["year"])) != 2022:
+        continue
+    pc = num(row["co2_per_capita"]); pop = num(row["population"])
+    if pc is None or not pop:
+        continue
+    iso = row["iso_code"]
+    ineq.append({
+        "name": row["country"], "iso3": iso, "continent": ISO[iso][1],
+        "co2_pc": r(pc, 2), "pop": int(pop),
+        "temp_share": r(tshare[iso][1], 2) if iso in tshare else None,
+    })
+ineq.sort(key=lambda d: d["co2_pc"], reverse=True)
+json.dump(ineq, open(os.path.join(OUT, "inequality.json"), "w"))
+print(f"inequality.json: {len(ineq)} countries")
+
+print("DONE ->", OUT)
